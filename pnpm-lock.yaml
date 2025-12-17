@@ -11,6 +11,9 @@ importers:
       dotenv:
         specifier: 16.4.4
         version: 16.4.4
+      dotenv-expand:
+        specifier: 11.0.6
+        version: 11.0.6
       next:
         specifier: 13.1.6
         version: 13.1.6(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -601,6 +604,10 @@ packages:
   diff-sequences@29.6.3:
     resolution: {integrity: sha512-EjePK1srD3P08o2j4f0ExnylqRs5B9tJjcp9t1krH2qRi8CCdsYfwe9JgSLurFBWwq4uOlipzfk5fHNvwFKr8Q==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+
+  dotenv-expand@11.0.6:
+    resolution: {integrity: sha512-8NHi73otpWsZGBSZwwknTXS5pqMOrk9+Ssrna8xCaxkzEpU9OTf9R5ArQGVw03//Zmk9MOwLPng9WwndvpAJ5g==}
+    engines: {node: '>=12'}
 
   dotenv@16.4.4:
     resolution: {integrity: sha512-XvPXc8XAQThSjAbY6cQ/9PcBXmFoWuw1sQ3b8HqUCR6ziGXjkTi//kB9SWa2UwqlgdAIuRqAa/9hVljzPehbYg==}
@@ -2042,6 +2049,10 @@ snapshots:
   detect-newline@3.1.0: {}
 
   diff-sequences@29.6.3: {}
+
+  dotenv-expand@11.0.6:
+    dependencies:
+      dotenv: 16.4.4
 
   dotenv@16.4.4: {}
 
