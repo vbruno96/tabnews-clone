@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm run services:up && pnpm run services:wait:database && pnpm migration:up && next dev",
+    "dev": "pnpm run services:up && pnpm run services:wait:database && pnpm migrations:up && next dev",
+    "postdev": "pnpm rum services:stop",
     "test": "pnpm run services:up && concurrently -n next,jest --hide next -k -s command-jest \"next dev\" \"jest --runInBand\"",
     "test:watch": "jest --watchAll --runInBand",
+    "posttest": "pnpm run services:stop",
     "services:up": "docker compose -f infra/compose.yaml up -d",
     "services:stop": "docker compose -f infra/compose.yaml stop",
     "services:down": "docker compose -f infra/compose.yaml down -v",
