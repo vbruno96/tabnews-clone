@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm run services:up && pnpm run services:wait:database && pnpm migrations:up && next dev",
-    "postdev": "pnpm rum services:stop",
+    "dev": "node infra/scripts/dev.js",
+    "dev:script": "pnpm run services:up && pnpm run services:wait:database && pnpm migrations:up && next dev",
+    "postdev": "pnpm run services:stop",
     "test": "pnpm run services:up && concurrently -n next,jest --hide next -k -s command-jest \"next dev\" \"jest --runInBand\"",
     "test:watch": "jest --watchAll --runInBand",
     "posttest": "pnpm run services:stop",
