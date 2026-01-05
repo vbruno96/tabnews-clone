@@ -37,7 +37,7 @@ function DatabaseStatus() {
   return (
     <>
       <h2>Banco de dados</h2>
-      {isLoading ? (
+      {isLoading && !data ? (
         <p>Carregando...</p>
       ) : (
         <ul>
