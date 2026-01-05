@@ -1,5 +1,5 @@
 import database from "infra/database.js";
-import { InternalServerError } from "infra/erros";
+import { InternalServerError } from "infra/errors";
 
 export default async function status(request, response) {
   try {
