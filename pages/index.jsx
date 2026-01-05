@@ -1,4 +1,3 @@
-import "./index.css";
 import buildImg from "../src/assets/build.svg";
 import Image from "next/image";
 
