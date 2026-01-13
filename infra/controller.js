@@ -15,6 +15,10 @@ function onErrorHandler(error, request, response) {
     error instanceof NotFoundError ||
     error instanceof UnauthorizedError
   ) {
+    if (error instanceof UnauthorizedError) {
+      clearSessionCookie(response);
+    }
+
     return response.status(error.statusCode).json(error);
   }
 
