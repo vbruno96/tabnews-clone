@@ -98,10 +98,16 @@ async function getLastEmail() {
   }
 }
 
+function extractUUID(text) {
+  const match = text.match(/[0-9a-fA-F-]{36}/);
+  return match ? match[0] : null;
+}
+
 const orchestrator = {
   clearDatabase,
   createUser,
   createSession,
+  extractUUID,
   getLastEmail,
   deleteAllEmails,
   runPendingMigrations,
