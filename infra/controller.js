@@ -8,6 +8,7 @@ import {
   UnauthorizedError,
   ForbiddenError,
 } from "infra/errors.js";
+import authorization from "models/authorization.js";
 import session from "models/session.js";
 import user from "models/user.js";
 
@@ -91,7 +92,7 @@ function injectAnonymousUser(request) {
 function canRequest(feature) {
   return function canRequestMiddleware(request, response, next) {
     const userTryingToRequest = request.context.user;
-    if (!userTryingToRequest.features.includes(feature)) {
+    if (!authorization.can(userTryingToRequest, feature)) {
       throw new ForbiddenError({
         message: "Você não possui permissão para executar esta ação.",
         action: `Verifique se o seu usuário possui a feature "${feature}"`,
