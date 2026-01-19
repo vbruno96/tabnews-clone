@@ -70,6 +70,11 @@ async function activateUser(userId) {
   return await activation.activateUserByUserId(userId);
 }
 
+async function addFeaturesToUser(userObject, features) {
+  const updatedUser = await user.addFeatures(userObject.id, features);
+  return updatedUser;
+}
+
 async function deleteAllEmails() {
   await fetch(
     `${process.env.EMAIL_HTTP_HOST}:${process.env.EMAIL_HTTP_PORT}/messages`,
@@ -112,6 +117,7 @@ function extractUUID(text) {
 
 const orchestrator = {
   activateUser,
+  addFeaturesToUser,
   clearDatabase,
   createUser,
   createSession,
