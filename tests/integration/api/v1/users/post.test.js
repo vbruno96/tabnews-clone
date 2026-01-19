@@ -2,6 +2,7 @@ import { version as uuidVersion } from "uuid";
 import orchestrator from "tests/orchestrator.js";
 import user from "models/user.js";
 import password from "models/password.js";
+import webserver from "infra/webserver";
 
 beforeAll(async () => {
   await orchestrator.waitForWallServices();
@@ -133,6 +134,40 @@ describe("POST /api/v1/users", () => {
         message: "O username informado já está sendo utilizado",
         action: "Utilize outro username para realizar esta operação.",
         status_code: 400,
+      });
+    });
+  });
+
+  describe("Default user", () => {
+    test("With valid user, but without 'create:user' feature", async () => {
+      const unauthorizedUser = await orchestrator.createUser();
+      await orchestrator.activateUser(unauthorizedUser.id);
+      const unauthorizedUserSessionObject = await orchestrator.createSession(
+        unauthorizedUser.id,
+      );
+
+      const response = await fetch(`${webserver.origin}/api/v1/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `session_id=${unauthorizedUserSessionObject.token}`,
+        },
+        body: JSON.stringify({
+          username: "UsuarioLogado",
+          email: "usuario.logado@email.com",
+          password: "senha@segura",
+        }),
+      });
+
+      expect(response.status).toBe(403);
+
+      const responseBody = await response.json();
+
+      expect(responseBody).toEqual({
+        name: "ForbiddenError",
+        message: "Você não possui permissão para executar esta ação.",
+        action: 'Verifique se o seu usuário possui a feature "create:user"',
+        status_code: 403,
       });
     });
   });
