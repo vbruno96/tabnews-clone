@@ -10,7 +10,7 @@ beforeAll(async () => {
   await orchestrator.runPendingMigrations();
 });
 
-describe("PATCH /api/vq/activations/[token_id]", () => {
+describe("PATCH /api/v1/activations/[token_id]", () => {
   describe("Anonymous user", () => {
     test("With nonexistent token", async () => {
       const response = await fetch(
@@ -140,6 +140,7 @@ describe("PATCH /api/vq/activations/[token_id]", () => {
       expect(activatedUser.features).toEqual([
         "create:session",
         "read:session",
+        "update:user",
       ]);
     });
 
