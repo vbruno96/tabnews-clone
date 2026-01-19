@@ -30,7 +30,7 @@ describe("DELETE /api/v1/sessions", () => {
       expect(responseBody).toEqual({
         name: "UnauthorizedError",
         message: "Usuário não possui sessão ativa.",
-        action: "Verifique se este ussuário está logado e tente novamente.",
+        action: "Verifique se este usuário está logado e tente novamente.",
         status_code: 401,
       });
     });
@@ -62,7 +62,7 @@ describe("DELETE /api/v1/sessions", () => {
       expect(responseBody).toEqual({
         name: "UnauthorizedError",
         message: "Usuário não possui sessão ativa.",
-        action: "Verifique se este ussuário está logado e tente novamente.",
+        action: "Verifique se este usuário está logado e tente novamente.",
         status_code: 401,
       });
     });
@@ -133,7 +133,7 @@ describe("DELETE /api/v1/sessions", () => {
       expect(doubleCheckResponseBody).toEqual({
         name: "UnauthorizedError",
         message: "Usuário não possui sessão ativa.",
-        action: "Verifique se este ussuário está logado e tente novamente.",
+        action: "Verifique se este usuário está logado e tente novamente.",
         status_code: 401,
       });
     });
