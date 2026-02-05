@@ -1,14 +1,17 @@
 import { createRouter } from "next-connect";
 import database from "infra/database.js";
-import controller from "infra/controller";
+import controller from "infra/controller.js";
+import authorization from "models/authorization.js";
 
 const router = createRouter();
 
+router.use(controller.injectAnonymousOrUser);
 router.get(getHandler);
 
 export default router.handler(controller.errorHandlers);
 
-async function getHandler(_, response) {
+async function getHandler(request, response) {
+  const userTryingToGet = request.context.user;
   const updatedAt = new Date().toISOString();
 
   const databaseVersionResult = await database.query("SHOW server_version");
@@ -28,7 +31,7 @@ async function getHandler(_, response) {
   const databaseUserOpenedConnections =
     databaseUserOpenedConnectionsResult.rows[0].opened_connections;
 
-  response.status(200).json({
+  const statusServerObject = {
     updated_at: updatedAt,
     dependencies: {
       database: {
@@ -37,5 +40,13 @@ async function getHandler(_, response) {
         version: databaseVersion,
       },
     },
-  });
+  };
+
+  const secureOutputValues = authorization.filterOutput(
+    userTryingToGet,
+    "read:status",
+    statusServerObject,
+  );
+
+  response.status(200).json(secureOutputValues);
 }

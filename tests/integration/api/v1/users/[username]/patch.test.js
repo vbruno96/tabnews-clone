@@ -91,9 +91,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody).toEqual({
         id: testUser.id,
         username: "uniqueuserupdated",
-        email: testUser.email,
         features: ["create:session", "read:session", "update:user"],
-        password: testUser.password,
         created_at: testUser.created_at.toJSON(),
         updated_at: responseBody.updated_at,
       });
@@ -135,9 +133,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody).toEqual({
         id: testUser.id,
         username: testUser.username,
-        email: "userupdated.email@email.com",
         features: ["create:session", "read:session", "update:user"],
-        password: testUser.password,
         created_at: testUser.created_at.toJSON(),
         updated_at: responseBody.updated_at,
       });
@@ -179,9 +175,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody).toEqual({
         id: testUser.id,
         username: testUser.username,
-        email: testUser.email,
         features: ["create:session", "read:session", "update:user"],
-        password: responseBody.password,
         created_at: testUser.created_at.toJSON(),
         updated_at: responseBody.updated_at,
       });
@@ -358,9 +352,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody).toEqual({
         id: defaultUser.id,
         username: "userZ",
-        email: defaultUser.email,
         features: defaultUser.features,
-        password: defaultUser.password,
         created_at: defaultUser.created_at.toJSON(),
         updated_at: responseBody.updated_at,
       });
