@@ -6,6 +6,7 @@ import migrator from "models/migrator.js";
 import user from "models/user.js";
 import session from "models/session.js";
 import { InternalServerError } from "infra/errors";
+import activation from "models/activation";
 
 const emailUrl = `${process.env.EMAIL_HTTP_HOST}:${process.env.EMAIL_HTTP_PORT}`;
 
@@ -63,6 +64,17 @@ async function createSession(userId) {
   return await session.create(userId);
 }
 
+async function activateUser(userId) {
+  const activationToken = await activation.create(userId);
+  await activation.markTokenAsUsed(activationToken.id);
+  return await activation.activateUserByUserId(userId);
+}
+
+async function addFeaturesToUser(userObject, features) {
+  const updatedUser = await user.addFeatures(userObject.id, features);
+  return updatedUser;
+}
+
 async function deleteAllEmails() {
   await fetch(
     `${process.env.EMAIL_HTTP_HOST}:${process.env.EMAIL_HTTP_PORT}/messages`,
@@ -76,6 +88,10 @@ async function getLastEmail() {
   try {
     const emailListResponse = await fetch(`${emailUrl}/messages`);
     const emailListBody = await emailListResponse.json();
+    if (emailListBody.length === 0) {
+      return null;
+    }
+
     const { id, sender, recipients, subject } = emailListBody.pop();
 
     const emailTextResponse = await fetch(`${emailUrl}/messages/${id}.plain`);
@@ -94,10 +110,18 @@ async function getLastEmail() {
   }
 }
 
+function extractUUID(text) {
+  const match = text.match(/[0-9a-fA-F-]{36}/);
+  return match ? match[0] : null;
+}
+
 const orchestrator = {
+  activateUser,
+  addFeaturesToUser,
   clearDatabase,
   createUser,
   createSession,
+  extractUUID,
   getLastEmail,
   deleteAllEmails,
   runPendingMigrations,
