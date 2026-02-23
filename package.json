@@ -16,6 +16,7 @@
     "services:wait:database": "node infra/scripts/wait-for-postgres.js",
     "migrations:create": "node-pg-migrate --envPath .env.development -m infra/migrations create",
     "migrations:up": "node-pg-migrate --envPath .env.development -m infra/migrations up",
+    "migrations:up:dry": "node-pg-migrate --envPath .env.development -m infra/migrations --dry-run up",
     "lint:prettier:check": "prettier --check .",
     "lint:prettier:fix": "prettier --write .",
     "lint:eslint:check": "next lint --dir .",
@@ -62,5 +63,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "engines": {
+    "node": "24"
   }
 }
