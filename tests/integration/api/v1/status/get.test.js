@@ -18,6 +18,31 @@ describe("GET /api/v1/status", () => {
       const { database } = responseBody.dependencies;
       expect(database.max_connections).toEqual(100);
       expect(database.opened_connections).toEqual(1);
+    });
+  });
+
+  describe("Privileged User", () => {
+    test("With `read:status:all", async () => {
+      const testUser = await orchestrator.createUser();
+      await orchestrator.addFeaturesToUser(testUser, ["read:status:all"]);
+      const sessionObject = await orchestrator.createSession(testUser.id);
+
+      const response = await fetch("http://localhost:3000/api/v1/status", {
+        headers: {
+          Cookie: `session_id=${sessionObject.token}`,
+        },
+      });
+
+      expect(response.status).toBe(200);
+
+      const responseBody = await response.json();
+
+      const parsedUpdatedAt = new Date(responseBody.updated_at).toISOString();
+      expect(responseBody.updated_at).toEqual(parsedUpdatedAt);
+
+      const { database } = responseBody.dependencies;
+      expect(database.max_connections).toEqual(100);
+      expect(database.opened_connections).toEqual(1);
       expect(database.version).toEqual("16.11");
     });
   });
