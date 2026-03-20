@@ -65,7 +65,7 @@ async function markTokenAsUsed(token) {
 
 async function sendEmailToUser(user, token) {
   await email.send({
-    from: "FinTab <contato@fintab.com.br>",
+    from: "TabnewsClone <contato@brunovm.dev.br>",
     to: user.email,
     subject: "Ative seu cadastro no FinTab!",
     text: `${user.username}, clique no link abaixo para ativar seu cadastro no FinTab.\n\n${webserver.origin}/cadastro/ativar/${token}\n\nAtenciosamente,\nEquipe FinTab`,
