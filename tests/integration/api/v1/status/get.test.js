@@ -26,7 +26,7 @@ describe("GET /api/v1/status", () => {
     test("With `read:status:all", async () => {
       const testUser = await orchestrator.createUser();
       await orchestrator.addFeaturesToUser(testUser, ["read:status:all"]);
-      const sessionObject = await orchestrator.createSession(testUser.id);
+      const sessionObject = await orchestrator.createSession(testUser);
 
       const response = await fetch(`${webserver.origin}/api/v1/status`, {
         headers: {

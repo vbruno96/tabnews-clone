@@ -28,10 +28,8 @@ describe("GET /api/v1/migrations", () => {
   describe("Default User", () => {
     test("Without `read:migrations`", async () => {
       const testUser = await orchestrator.createUser();
-      await orchestrator.activateUser(testUser.id);
-      const testUserSessionObject = await orchestrator.createSession(
-        testUser.id,
-      );
+      await orchestrator.activateUser(testUser);
+      const testUserSessionObject = await orchestrator.createSession(testUser);
 
       const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
         headers: {
@@ -55,10 +53,8 @@ describe("GET /api/v1/migrations", () => {
   describe("Privileged User", () => {
     test("With `read:migrations`", async () => {
       const testUser = await orchestrator.createUser();
-      await orchestrator.activateUser(testUser.id);
-      const testUserSessionObject = await orchestrator.createSession(
-        testUser.id,
-      );
+      await orchestrator.activateUser(testUser);
+      const testUserSessionObject = await orchestrator.createSession(testUser);
       await orchestrator.addFeaturesToUser(testUser, ["read:migrations"]);
 
       const response = await fetch(`${webserver.origin}/api/v1/migrations`, {

@@ -139,10 +139,9 @@ describe("POST /api/v1/users", () => {
   describe("Default user", () => {
     test("With valid user, but without `create:user` feature", async () => {
       const unauthorizedUser = await orchestrator.createUser();
-      await orchestrator.activateUser(unauthorizedUser.id);
-      const unauthorizedUserSessionObject = await orchestrator.createSession(
-        unauthorizedUser.id,
-      );
+      await orchestrator.activateUser(unauthorizedUser);
+      const unauthorizedUserSessionObject =
+        await orchestrator.createSession(unauthorizedUser);
 
       const response = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",

@@ -52,23 +52,23 @@ async function runPendingMigrations() {
   await migrator.runPendingMigrations();
 }
 
-async function createUser(userData) {
+async function createUser(userObject) {
   return await user.create({
     username:
-      userData?.username || faker.internet.username().replace(/[_.-]/g, ""),
-    email: userData?.email || faker.internet.email(),
-    password: userData?.password || "ValidPassword",
+      userObject?.username || faker.internet.username().replace(/[_.-]/g, ""),
+    email: userObject?.email || faker.internet.email(),
+    password: userObject?.password || "ValidPassword",
   });
 }
 
-async function createSession(userId) {
-  return await session.create(userId);
+async function createSession(userObject) {
+  return await session.create(userObject.id);
 }
 
-async function activateUser(userId) {
-  const activationToken = await activation.create(userId);
+async function activateUser(userObject) {
+  const activationToken = await activation.create(userObject.id);
   await activation.markTokenAsUsed(activationToken.id);
-  return await activation.activateUserByUserId(userId);
+  return await activation.activateUserByUserId(userObject.id);
 }
 
 async function addFeaturesToUser(userObject, features) {
