@@ -19,7 +19,7 @@
     "migrations:up:dry": "node-pg-migrate --envPath .env.development -m infra/migrations --dry-run up",
     "lint:prettier:check": "prettier --check .",
     "lint:prettier:fix": "prettier --write .",
-    "lint:eslint:check": "next lint --dir .",
+    "lint:eslint:check": "eslint . --max-warnings 0",
     "prepare": "husky",
     "commit": "cz"
   },
@@ -31,13 +31,13 @@
     "async-retry": "1.3.3",
     "bcryptjs": "3.0.3",
     "cookie": "1.1.1",
-    "next": "14.2.5",
+    "next": "16.2.0",
     "next-connect": "1.0.0",
     "node-pg-migrate": "7.6.1",
     "nodemailer": "8.0.3",
     "pg": "8.20.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "swr": "2.4.1",
     "uuid": "11.1.0"
   },
@@ -50,14 +50,12 @@
     "cz-conventional-changelog": "3.3.0",
     "dotenv": "16.4.4",
     "dotenv-expand": "12.0.3",
-    "eslint": "8.57.0",
-    "eslint-config-next": "14.2.5",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-jest": "28.8.0",
+    "eslint": "10.0.3",
     "husky": "9.1.7",
     "jest": "30.3.0",
     "prettier": "3.8.1",
-    "set-cookie-parser": "3.0.1"
+    "set-cookie-parser": "3.0.1",
+    "eslint-config-next": "16.2.0"
   },
   "config": {
     "commitizen": {
