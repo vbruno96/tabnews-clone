@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import database from "infra/database.js";
 import { UnauthorizedError } from "infra/errors";
 
-const EXPIRATION_IN_MILISECONDS = 60 * 60 * 24 * 30 * 1000; // 30 Days in miliseconds
+const EXPIRATION_IN_MILLISECONDS = 60 * 60 * 24 * 30 * 1000; // 30 Days in miliseconds
 
 async function create(userId) {
   const expiresAt = getExpiresAtValue();
@@ -101,7 +101,7 @@ async function expireById(sessionId) {
 }
 
 function getExpiresAtValue() {
-  return new Date(Date.now() + EXPIRATION_IN_MILISECONDS);
+  return new Date(Date.now() + EXPIRATION_IN_MILLISECONDS);
 }
 
 const session = {
@@ -109,7 +109,7 @@ const session = {
   expireById,
   findOneValidByToken,
   renew,
-  EXPIRATION_IN_MILISECONDS,
+  EXPIRATION_IN_MILLISECONDS,
 };
 
 export default session;

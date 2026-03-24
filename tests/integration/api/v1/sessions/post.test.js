@@ -140,7 +140,7 @@ describe("POST /api/v1/sessions", () => {
 
       const actualLifetimeInMilliseconds = expiresAt - createdAt;
       const lifetimeDifferenceInMilliseconds =
-        session.EXPIRATION_IN_MILISECONDS - actualLifetimeInMilliseconds;
+        session.EXPIRATION_IN_MILLISECONDS - actualLifetimeInMilliseconds;
 
       expect(lifetimeDifferenceInMilliseconds).toBeLessThanOrEqual(5000);
 
@@ -148,7 +148,7 @@ describe("POST /api/v1/sessions", () => {
       expect(parsedCookie.session_id).toEqual({
         name: "session_id",
         value: responseBody.token,
-        maxAge: session.EXPIRATION_IN_MILISECONDS / 1000, // 30 Days in seconds
+        maxAge: session.EXPIRATION_IN_MILLISECONDS / 1000, // 30 Days in seconds
         path: "/",
         httpOnly: true,
         sameSite: "Lax",
