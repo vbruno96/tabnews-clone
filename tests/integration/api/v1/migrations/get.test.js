@@ -1,4 +1,5 @@
 import orchestrator from "tests/orchestrator.js";
+import webserver from "infra/webserver.js";
 
 beforeAll(async () => {
   await orchestrator.waitForWallServices();
@@ -9,7 +10,7 @@ beforeAll(async () => {
 describe("GET /api/v1/migrations", () => {
   describe("Anonymous User", () => {
     test("Retrieving pending migrations", async () => {
-      const response = await fetch("http://localhost:3000/api/v1/migrations");
+      const response = await fetch(`${webserver.origin}/api/v1/migrations`);
 
       expect(response.status).toBe(403);
 
@@ -27,12 +28,10 @@ describe("GET /api/v1/migrations", () => {
   describe("Default User", () => {
     test("Without `read:migrations`", async () => {
       const testUser = await orchestrator.createUser();
-      await orchestrator.activateUser(testUser.id);
-      const testUserSessionObject = await orchestrator.createSession(
-        testUser.id,
-      );
+      await orchestrator.activateUser(testUser);
+      const testUserSessionObject = await orchestrator.createSession(testUser);
 
-      const response = await fetch("http://localhost:3000/api/v1/migrations", {
+      const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
         headers: {
           Cookie: `session_id=${testUserSessionObject.token}`,
         },
@@ -54,13 +53,11 @@ describe("GET /api/v1/migrations", () => {
   describe("Privileged User", () => {
     test("With `read:migrations`", async () => {
       const testUser = await orchestrator.createUser();
-      await orchestrator.activateUser(testUser.id);
-      const testUserSessionObject = await orchestrator.createSession(
-        testUser.id,
-      );
+      await orchestrator.activateUser(testUser);
+      const testUserSessionObject = await orchestrator.createSession(testUser);
       await orchestrator.addFeaturesToUser(testUser, ["read:migrations"]);
 
-      const response = await fetch("http://localhost:3000/api/v1/migrations", {
+      const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
         headers: {
           Cookie: `session_id=${testUserSessionObject.token}`,
         },

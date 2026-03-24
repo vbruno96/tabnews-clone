@@ -3,12 +3,10 @@ import activation from "models/activation.js";
 import authorization from "models/authorization.js";
 import { createRouter } from "next-connect";
 
-const router = createRouter();
-
-router.use(controller.injectAnonymousOrUser);
-router.patch(controller.canRequest("read:activation_token"), pathHandler);
-
-export default router.handler(controller.errorHandlers);
+export default createRouter()
+  .use(controller.injectAnonymousOrUser)
+  .patch(controller.canRequest("read:activation_token"), pathHandler)
+  .handler(controller.errorHandlers);
 
 async function pathHandler(request, response) {
   const userTryingToPatch = request.context.user;

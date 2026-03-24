@@ -34,11 +34,11 @@ describe("GET /api/v1/user", () => {
       const createUser = await orchestrator.createUser({
         username: "UserWithValidSession",
       });
-      const activatedUser = await orchestrator.activateUser(createUser.id);
+      const activatedUser = await orchestrator.activateUser(createUser);
 
-      const sessionObject = await orchestrator.createSession(createUser.id);
+      const sessionObject = await orchestrator.createSession(createUser);
 
-      const response = await fetch("http://localhost:3000/api/v1/user", {
+      const response = await fetch(`${webserver.origin}/api/v1/user`, {
         headers: {
           Cookie: `session_id=${sessionObject.token}`,
         },
@@ -83,9 +83,10 @@ describe("GET /api/v1/user", () => {
       expect(parsedCookie.session_id).toEqual({
         name: "session_id",
         value: sessionObject.token,
-        maxAge: session.EXPIRATION_IN_MILISECONDS / 1000, // 30 Days in seconds
+        maxAge: session.EXPIRATION_IN_MILLISECONDS / 1000, // 30 Days in seconds
         path: "/",
         httpOnly: true,
+        sameSite: "Lax",
       });
     });
 
@@ -93,16 +94,18 @@ describe("GET /api/v1/user", () => {
       const createUser = await orchestrator.createUser({
         username: "UserClosestExpiringSession",
       });
-      const activatedUser = await orchestrator.activateUser(createUser.id);
+      const activatedUser = await orchestrator.activateUser(createUser);
 
       jest.useFakeTimers({
-        now: new Date(Date.now() - (session.EXPIRATION_IN_MILISECONDS - 60000)),
+        now: new Date(
+          Date.now() - (session.EXPIRATION_IN_MILLISECONDS - 60000),
+        ),
       });
-      const sessionObject = await orchestrator.createSession(createUser.id);
+      const sessionObject = await orchestrator.createSession(createUser);
 
       jest.useRealTimers();
 
-      const response = await fetch("http://localhost:3000/api/v1/user", {
+      const response = await fetch(`${webserver.origin}/api/v1/user`, {
         headers: {
           Cookie: `session_id=${sessionObject.token}`,
         },
@@ -142,9 +145,10 @@ describe("GET /api/v1/user", () => {
       expect(parsedCookie.session_id).toEqual({
         name: "session_id",
         value: sessionObject.token,
-        maxAge: session.EXPIRATION_IN_MILISECONDS / 1000, // 30 Days in seconds
+        maxAge: session.EXPIRATION_IN_MILLISECONDS / 1000, // 30 Days in seconds
         path: "/",
         httpOnly: true,
+        sameSite: "Lax",
       });
     });
 
@@ -152,7 +156,7 @@ describe("GET /api/v1/user", () => {
       const nonexistentToken =
         "b05eb60e482daa828d17c3adb11cb0831caf50d90c322f12b4092c460c257f059d8340be20d6301ce1f0e569285fc5d2";
 
-      const response = await fetch("http://localhost:3000/api/v1/user", {
+      const response = await fetch(`${webserver.origin}/api/v1/user`, {
         headers: {
           Cookie: `session_id=${nonexistentToken}`,
         },
@@ -182,18 +186,18 @@ describe("GET /api/v1/user", () => {
 
     test("With expired session", async () => {
       jest.useFakeTimers({
-        now: new Date(Date.now() - session.EXPIRATION_IN_MILISECONDS),
+        now: new Date(Date.now() - session.EXPIRATION_IN_MILLISECONDS),
       });
 
       const createUser = await orchestrator.createUser({
         username: "UserWithExpiredSession",
       });
 
-      const { token } = await orchestrator.createSession(createUser.id);
+      const { token } = await orchestrator.createSession(createUser);
 
       jest.useRealTimers();
 
-      const response = await fetch("http://localhost:3000/api/v1/user", {
+      const response = await fetch(`${webserver.origin}/api/v1/user`, {
         headers: {
           Cookie: `session_id=${token}`,
         },

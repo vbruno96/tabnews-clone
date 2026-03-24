@@ -13,7 +13,7 @@ beforeAll(async () => {
 describe("POST /api/v1/users", () => {
   describe("Anonymous User", () => {
     test("With unique and valid data", async () => {
-      const response = await fetch("http://localhost:3000/api/v1/users", {
+      const response = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,8 +57,8 @@ describe("POST /api/v1/users", () => {
       expect(incorrectPasswordMatch).toBe(false);
     });
 
-    test("With duplicated 'email'", async () => {
-      const response1 = await fetch("http://localhost:3000/api/v1/users", {
+    test("With duplicated `email`", async () => {
+      const response1 = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +72,7 @@ describe("POST /api/v1/users", () => {
 
       expect(response1.status).toBe(201);
 
-      const response2 = await fetch("http://localhost:3000/api/v1/users", {
+      const response2 = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -96,8 +96,8 @@ describe("POST /api/v1/users", () => {
       });
     });
 
-    test("With duplicated 'username'", async () => {
-      const response1 = await fetch("http://localhost:3000/api/v1/users", {
+    test("With duplicated `username`", async () => {
+      const response1 = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +111,7 @@ describe("POST /api/v1/users", () => {
 
       expect(response1.status).toBe(201);
 
-      const response2 = await fetch("http://localhost:3000/api/v1/users", {
+      const response2 = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -137,12 +137,11 @@ describe("POST /api/v1/users", () => {
   });
 
   describe("Default user", () => {
-    test("With valid user, but without 'create:user' feature", async () => {
+    test("With valid user, but without `create:user` feature", async () => {
       const unauthorizedUser = await orchestrator.createUser();
-      await orchestrator.activateUser(unauthorizedUser.id);
-      const unauthorizedUserSessionObject = await orchestrator.createSession(
-        unauthorizedUser.id,
-      );
+      await orchestrator.activateUser(unauthorizedUser);
+      const unauthorizedUserSessionObject =
+        await orchestrator.createSession(unauthorizedUser);
 
       const response = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",

@@ -43,9 +43,10 @@ function onNoMatchHandler(request, response) {
 function setSessionCookie(sessionToken, response) {
   const setCookie = cookie.serialize("session_id", sessionToken, {
     path: "/",
-    maxAge: session.EXPIRATION_IN_MILISECONDS / 1000, // 30 Days in seconds
+    maxAge: session.EXPIRATION_IN_MILLISECONDS / 1000, // 30 Days in seconds
     secure: process.env.NODE_ENV === "production" ? true : false,
     httpOnly: true,
+    sameSite: "lax",
   });
   response.setHeader("Set-Cookie", setCookie);
 }

@@ -1,4 +1,5 @@
 import orchestrator from "tests/orchestrator.js";
+import webserver from "infra/webserver.js";
 
 beforeAll(async () => {
   await orchestrator.waitForWallServices();
@@ -9,7 +10,7 @@ beforeAll(async () => {
 describe("POST /api/v1/migrations", () => {
   describe("Anonymous User", () => {
     test("Running pending migrations", async () => {
-      const response = await fetch("http://localhost:3000/api/v1/migrations", {
+      const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
         method: "POST",
       });
       const responseBody = await response.json();
@@ -28,12 +29,10 @@ describe("POST /api/v1/migrations", () => {
   describe("Default User", () => {
     test("Running pending migrations", async () => {
       const testUser = await orchestrator.createUser();
-      await orchestrator.activateUser(testUser.id);
-      const testUserSessionObject = await orchestrator.createSession(
-        testUser.id,
-      );
+      await orchestrator.activateUser(testUser);
+      const testUserSessionObject = await orchestrator.createSession(testUser);
 
-      const response = await fetch("http://localhost:3000/api/v1/migrations", {
+      const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
         method: "POST",
         headers: {
           Cookie: `session_id=${testUserSessionObject.token}`,
@@ -55,13 +54,11 @@ describe("POST /api/v1/migrations", () => {
   describe("Privileged User", () => {
     test("With `create:migrations`", async () => {
       const testUser = await orchestrator.createUser();
-      await orchestrator.activateUser(testUser.id);
-      const testUserSessionObject = await orchestrator.createSession(
-        testUser.id,
-      );
+      await orchestrator.activateUser(testUser);
+      const testUserSessionObject = await orchestrator.createSession(testUser);
       await orchestrator.addFeaturesToUser(testUser, ["create:migrations"]);
 
-      const response = await fetch("http://localhost:3000/api/v1/migrations", {
+      const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
         method: "POST",
         headers: {
           Cookie: `session_id=${testUserSessionObject.token}`,
