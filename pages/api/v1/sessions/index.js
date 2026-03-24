@@ -18,10 +18,7 @@ export default router.handler(controller.errorHandlers);
 async function postHandler(request, response) {
   const { email, password } = request.body;
 
-  const authenticatedUser = await authentication.getAuthenticatedUser(
-    email,
-    password,
-  );
+  const authenticatedUser = await authentication.getUser(email, password);
 
   if (!authorization.can(authenticatedUser, "create:session")) {
     throw new ForbiddenError({
