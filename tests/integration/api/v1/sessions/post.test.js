@@ -148,6 +148,7 @@ describe("POST /api/v1/sessions", () => {
         maxAge: session.EXPIRATION_IN_MILISECONDS / 1000, // 30 Days in seconds
         path: "/",
         httpOnly: true,
+        sameSite: "Lax",
       });
     });
   });

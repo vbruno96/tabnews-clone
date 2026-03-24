@@ -86,6 +86,7 @@ describe("GET /api/v1/user", () => {
         maxAge: session.EXPIRATION_IN_MILISECONDS / 1000, // 30 Days in seconds
         path: "/",
         httpOnly: true,
+        sameSite: "Lax",
       });
     });
 
@@ -145,6 +146,7 @@ describe("GET /api/v1/user", () => {
         maxAge: session.EXPIRATION_IN_MILISECONDS / 1000, // 30 Days in seconds
         path: "/",
         httpOnly: true,
+        sameSite: "Lax",
       });
     });
 
