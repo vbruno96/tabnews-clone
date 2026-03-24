@@ -2,6 +2,7 @@ import { version as uuidVersion } from "uuid";
 import orchestrator from "tests/orchestrator.js";
 import password from "models/password.js";
 import user from "models/user.js";
+import webserver from "infra/webserver.js";
 
 beforeAll(async () => {
   await orchestrator.waitForWallServices();
@@ -49,7 +50,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       const sessionObject = await orchestrator.createSession(createdUser.id);
 
       const response = await fetch(
-        "http://localhost:3000/api/v1/users/UsuarioInexistente",
+        `${webserver.origin}/api/v1/users/UsuarioInexistente`,
         {
           method: "PATCH",
           headers: {
@@ -216,7 +217,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         createdUser2.id,
       );
 
-      const response = await fetch("http://localhost:3000/api/v1/users/user2", {
+      const response = await fetch(`${webserver.origin}/api/v1/users/user2`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -252,7 +253,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         createdUser2.id,
       );
 
-      const response = await fetch("http://localhost:3000/api/v1/users/user1", {
+      const response = await fetch(`${webserver.origin}/api/v1/users/user1`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

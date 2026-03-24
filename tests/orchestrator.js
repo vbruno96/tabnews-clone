@@ -7,6 +7,7 @@ import user from "models/user.js";
 import session from "models/session.js";
 import { InternalServerError } from "infra/errors";
 import activation from "models/activation";
+import webserver from "infra/webserver.js";
 
 const emailUrl = `${process.env.EMAIL_HTTP_HOST}:${process.env.EMAIL_HTTP_PORT}`;
 
@@ -25,7 +26,7 @@ async function waitForWallServices() {
     });
 
     async function fetchStatusPage() {
-      const response = await fetch("http://localhost:3000/api/v1/status");
+      const response = await fetch(`${webserver.origin}/api/v1/status`);
       if (response.status !== 200) {
         throw Error();
       }
