@@ -1,7 +1,25 @@
 import { useState } from "react";
-export default function RegisterPage() {
-  console.log("Render do <RegisterPage>");
+import { Button, FormControl, TextInput, Stack, Heading } from "@primer/react";
+import DefaultLayout from "interface/DefaultLayout";
 
+export default function RegisterPage() {
+  return (
+    <DefaultLayout
+      contentWidth="small"
+      metadata={{
+        title: "Cadastro",
+        description: "Crie sua conta de forma gratuita.",
+      }}
+    >
+      <Stack gap="spacious">
+        <Heading as="h1">Cadastro</Heading>
+        <RegisterForm />
+      </Stack>
+    </DefaultLayout>
+  );
+}
+
+function RegisterForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,35 +42,41 @@ export default function RegisterPage() {
   }
 
   return (
-    <>
-      <h1>Cadastro</h1>
-      <form onSubmit={handleFormSubmit}>
-        <div>
-          Nome de usuário:{" "}
-          <input
+    <form onSubmit={handleFormSubmit}>
+      <Stack gap="normal">
+        <FormControl>
+          <FormControl.Label>Nome de usuário</FormControl.Label>
+          <TextInput
             type="text"
             value={username}
             onChange={(event) => setUsername(event.target.value)}
+            block
           />
-        </div>
-        <div>
-          Email:{" "}
-          <input
+        </FormControl>
+        <FormControl>
+          <FormControl.Label>Email</FormControl.Label>
+          <TextInput
             type="text"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
+            block
           />
-        </div>
-        <div>
-          Senha:{" "}
-          <input
+        </FormControl>
+        <FormControl>
+          <FormControl.Label>Senha</FormControl.Label>
+          <TextInput
             type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            block
           />
-        </div>
-        <button type="submit">Criar Cadastro</button>
-      </form>
-    </>
+        </FormControl>
+        <Stack.Item>
+          <Button variant="primary" type="submit">
+            Criar cadastro
+          </Button>
+        </Stack.Item>
+      </Stack>
+    </form>
   );
 }
