@@ -86,7 +86,6 @@ async function findOneValidId(token) {
         WHERE
           id = $1
           AND expires_at > NOW()
-          AND used_at IS NULL
         LIMIT
           1
       ;`,

@@ -13,6 +13,14 @@ async function pathHandler(request, response) {
   const tokenId = request.query.token_id;
 
   const validActivationToken = await activation.findOneValidId(tokenId);
+
+  if (validActivationToken.used_at) {
+    return response.status(208).json({
+      message: "Token ativado anteriormente!",
+      action: "Usuário ativado, faça login para acessar a aplicação",
+    });
+  }
+
   await activation.activateUserByUserId(validActivationToken.user_id);
 
   const usedActivationToken = await activation.markTokenAsUsed(tokenId);

@@ -65,10 +65,10 @@ describe("PATCH /api/v1/activations/[token_id]", () => {
 
     test("With already used token", async () => {
       const createdUser = await orchestrator.createUser();
-      const expiredActivationToken = await activation.create(createdUser.id);
+      const usedActivationToken = await activation.create(createdUser.id);
 
       const response1 = await fetch(
-        `${webserver.origin}/api/v1/activations/${expiredActivationToken.id}`,
+        `${webserver.origin}/api/v1/activations/${usedActivationToken.id}`,
         {
           method: "PATCH",
         },
@@ -77,22 +77,19 @@ describe("PATCH /api/v1/activations/[token_id]", () => {
       expect(response1.status).toBe(200);
 
       const response2 = await fetch(
-        `${webserver.origin}/api/v1/activations/${expiredActivationToken.id}`,
+        `${webserver.origin}/api/v1/activations/${usedActivationToken.id}`,
         {
           method: "PATCH",
         },
       );
 
-      expect(response2.status).toBe(404);
+      expect(response2.status).toBe(208);
 
       const response2Body = await response2.json();
 
       expect(response2Body).toEqual({
-        name: "NotFoundError",
-        message:
-          "O token de ativação utilizado não foi encontrado no sistema ou expirou.",
-        action: "Faça um novo cadastro",
-        status_code: 404,
+        message: "Token ativado anteriormente!",
+        action: "Usuário ativado, faça login para acessar a aplicação",
       });
     });
 
